@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
+const API_KEY = "d1845658f92b31c64bd94f06f7188c9c";
 
 export default function Weather() {
   const [weather, setWeather] = useState(null);
@@ -11,6 +11,28 @@ export default function Weather() {
   const [error, setError]     = useState(null);
 
   
+  const fetchData = async ()=>{
+    try{
+      setLoading(true);
+      setError(null);
+      const response = await axios.get(
+        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
+      );
+      setWeather(response.data);
+    }
+    catch(e){
+      setWeather(null);
+      setError("Failed to fetch weather");
+
+    }
+    finally{
+      setLoading(false);
+    }
+  }
+ useEffect(()=>{
+  fetchData();
+ },[city])
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
